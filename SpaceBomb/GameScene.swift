@@ -15,6 +15,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         self.backgroundColor = .white
+        self.addBackground()
         self.addShip()
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -34,6 +35,22 @@ class GameScene: SKScene {
         shipMoveDown = SKAction.moveBy(x: 0, y: -30, duration: 0.2)
         
         self.addChild(ship)
+    }
+    
+    // scrolling background
+    func addBackground() {
+        for index in 0..<2 {
+            let bg = SKSpriteNode(imageNamed: "Background")
+            bg.position = CGPoint(
+                x: index * Int(bg.size.width),
+                y: 20
+            )
+            bg.anchorPoint = CGPoint(x: 0, y: 0)
+            bg.name = "background"
+            
+            self.addChild(bg)
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
