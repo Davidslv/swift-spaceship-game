@@ -8,18 +8,26 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     var ship = SKSpriteNode()
     var shipMoveUp = SKAction()
     var shipMoveDown = SKAction()
+    var lastBombAdded: TimeInterval = 0
+    
     let backgroundVelocity: CGFloat = 3.0
+    let bombVelocity: CGFloat = 5.0
+    
+    let shipCategory = 0x1 << 0
+    let bombCategory = 0x1 << 1
     
     override func didMove(to view: SKView) {
         self.backgroundColor = .white
         self.addBackground()
         self.addShip()
+        self.addBomb()
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        self.physicsWorld.contactDelegate = self
     }
     
     func addShip() {
@@ -29,6 +37,10 @@ class GameScene: SKScene {
         
         ship.physicsBody = SKPhysicsBody(rectangleOf: ship.size)
         ship.physicsBody?.isDynamic = true
+        ship.physicsBody?.categoryBitMask = UInt32(shipCategory)
+        ship.physicsBody?.contactTestBitMask = UInt32(bombCategory)
+        ship.physicsBody?.collisionBitMask = 0
+        
         ship.name = "ship"
         ship.position = CGPoint(x: 120, y: 160)
         
@@ -51,7 +63,7 @@ class GameScene: SKScene {
             self.addChild(bg)
         }
         
-    }    
+    }
     
     // scrolling background
     func moveBackground() {
@@ -73,8 +85,77 @@ class GameScene: SKScene {
         })
     }
     
+    func addBomb() {
+        let bomb = SKSpriteNode(imageNamed: "Bomb")
+        bomb.setScale(0.15)
+        
+        bomb.physicsBody = SKPhysicsBody(rectangleOf: bomb.size)
+        bomb.physicsBody?.isDynamic = true
+        
+        bomb.physicsBody?.categoryBitMask = UInt32(bombCategory)
+        bomb.physicsBody?.contactTestBitMask = UInt32(shipCategory)
+        bomb.physicsBody?.collisionBitMask = 0
+        bomb.physicsBody?.usesPreciseCollisionDetection = true
+        
+        bomb.name = "bomb"
+        
+        let random: CGFloat = CGFloat(arc4random_uniform(300))
+        
+        bomb.position = CGPoint(
+            x: self.frame.size.width + 20,
+            y: random
+        )
+        
+        self.addChild(bomb)
+    }
+    
+    func moveBomb() {
+        self.enumerateChildNodes(withName: "bomb", using: {
+            (node, stop) -> Void in
+            if let bomb = node as? SKSpriteNode {
+                bomb.position = CGPoint(
+                    x: bomb.position.x - self.bombVelocity,
+                    y: bomb.position.y
+                )
+                
+                if bomb.position.x <= 0 {
+                    bomb.removeFromParent()
+                }
+            }
+        })
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        var firstBody = SKPhysicsBody()
+        var secondBody = SKPhysicsBody()
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        }
+        else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if (firstBody.categoryBitMask & UInt32(shipCategory)) != 0 &&
+            (secondBody.categoryBitMask & UInt32(bombCategory)) != 0
+        {
+            ship.removeFromParent()
+            
+            let gameOverScene = GameOverScene(size: self.size)
+            self.view?.presentScene(gameOverScene, transition: .doorway(withDuration: 1))
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         self.moveBackground()
+        self.moveBomb()
+        
+        if currentTime - self.lastBombAdded > 0.5 {
+            self.lastBombAdded = currentTime + 1
+            self.addBomb()
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

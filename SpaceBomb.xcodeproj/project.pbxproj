@@ -17,6 +17,7 @@
 		2D9FA539222882CC00D60AE3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D9FA537222882CC00D60AE3 /* LaunchScreen.storyboard */; };
 		2D9FA544222882CC00D60AE3 /* SpaceBombTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9FA543222882CC00D60AE3 /* SpaceBombTests.swift */; };
 		2D9FA54F222882CC00D60AE3 /* SpaceBombUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9FA54E222882CC00D60AE3 /* SpaceBombUITests.swift */; };
+		2D9FA55D22289B3F00D60AE3 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9FA55C22289B3F00D60AE3 /* GameOverScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		2D9FA54A222882CC00D60AE3 /* SpaceBombUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpaceBombUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D9FA54E222882CC00D60AE3 /* SpaceBombUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceBombUITests.swift; sourceTree = "<group>"; };
 		2D9FA550222882CC00D60AE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2D9FA55C22289B3F00D60AE3 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				2D9FA535222882CC00D60AE3 /* Assets.xcassets */,
 				2D9FA537222882CC00D60AE3 /* LaunchScreen.storyboard */,
 				2D9FA53A222882CC00D60AE3 /* Info.plist */,
+				2D9FA55C22289B3F00D60AE3 /* GameOverScene.swift */,
 			);
 			path = SpaceBomb;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 			files = (
 				2D9FA52F222882CA00D60AE3 /* GameScene.swift in Sources */,
 				2D9FA531222882CA00D60AE3 /* GameViewController.swift in Sources */,
+				2D9FA55D22289B3F00D60AE3 /* GameOverScene.swift in Sources */,
 				2D9FA529222882CA00D60AE3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
