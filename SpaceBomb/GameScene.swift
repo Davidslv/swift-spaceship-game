@@ -12,6 +12,7 @@ class GameScene: SKScene {
     var ship = SKSpriteNode()
     var shipMoveUp = SKAction()
     var shipMoveDown = SKAction()
+    let backgroundVelocity: CGFloat = 3.0
     
     override func didMove(to view: SKView) {
         self.backgroundColor = .white
@@ -37,13 +38,12 @@ class GameScene: SKScene {
         self.addChild(ship)
     }
     
-    // scrolling background
     func addBackground() {
         for index in 0..<2 {
             let bg = SKSpriteNode(imageNamed: "Background")
             bg.position = CGPoint(
                 x: index * Int(bg.size.width),
-                y: 20
+                y: 0
             )
             bg.anchorPoint = CGPoint(x: 0, y: 0)
             bg.name = "background"
@@ -51,6 +51,30 @@ class GameScene: SKScene {
             self.addChild(bg)
         }
         
+    }    
+    
+    // scrolling background
+    func moveBackground() {
+        self.enumerateChildNodes(withName: "background", using: {
+            (node, stop) -> Void in
+            if let bg = node as? SKSpriteNode {
+                bg.position = CGPoint(
+                    x: bg.position.x - self.backgroundVelocity,
+                    y: bg.position.y
+                )
+                
+                if bg.position.x <= -bg.size.width {
+                    bg.position = CGPoint(
+                        x: bg.position.x + bg.size.width * 2,
+                        y: bg.position.y
+                    )
+                }
+            }
+        })
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        self.moveBackground()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
